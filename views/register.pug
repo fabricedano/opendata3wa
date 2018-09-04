@@ -3,15 +3,15 @@ extends master.pug
 block content
   .container.mt-5
     h1(class="login-register") Inscription
-    form
+    form(method="post" action="/register")
         div(class="form-group")
-            input(type="text" class="form-control" id="nom"  placeholder="Entrez votre nom")
+            input(type="text" class="form-control" id="nom" name="firstname" placeholder="Entrez votre nom")
         div(class="form-group")
-            input(type="text" class="form-control" id="Prénom"  placeholder="Entrez votre prénom")
+            input(type="text" class="form-control" id="Prénom" name="lastname" placeholder="Entrez votre prénom")
         div(class="form-group")
-            input(type="email" class="form-control" id="Email" aria-describedby="emailHelp" placeholder="Entrez votre adresse email")
+            input(type="email" class="form-control" id="Email" aria-describedby="emailHelp" name="email" placeholder="Entrez votre adresse email")
         div(class="form-group")
-            input(type="password" class="form-control" id="Password1" placeholder="Entrez votre mot de passe")
+            input(type="password" class="form-control" id="Password1" name="pwd1" placeholder="Entrez votre mot de passe")
         div(class="form-group")
-            input(type="password" class="form-control" id="Password2" placeholder="Retapez votre mot de passe")
+            input(type="password" class="form-control" id="Password2" name="pwd2" placeholder="Retapez votre mot de passe")
         button(type="submit" class="btn btn-primary") Confirmer
