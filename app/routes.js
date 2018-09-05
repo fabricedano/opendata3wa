@@ -1,3 +1,5 @@
+const User = require('./models/User.models')
+
 module.exports = function(app) {
     app.get('/', function (req, res) {
         res.render('index')
@@ -11,6 +13,17 @@ module.exports = function(app) {
         res.render('register')
       })
       app.post('/register', function (req, res) {
-          console.log(req.body)
+        User.register(
+          req.body.firstname,
+          req.body.lastname,
+          req.body.email,
+          req.body.pwd1,
+          req.body.pwd2,
+        ).then(() => {
+          res.redirect('/?register=ok')
+        })
+        .catch(errors => {
+          res.render('register', { errors, user: req.body })
+      })
       })
 }

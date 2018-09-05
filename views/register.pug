@@ -3,6 +3,14 @@ extends master.pug
 block content
   .container.mt-5
     h1(class="login-register") Inscription
+
+    //- Gestion des erreurs si existantes
+    if errors
+        div.alert.alert-danger
+            each error, index in errors
+                | #{error} <br>
+    //- =================================
+
     form(method="post" action="/register")
         div(class="form-group")
             input(type="text" class="form-control" id="nom" name="firstname" placeholder="Entrez votre nom")
@@ -15,3 +23,5 @@ block content
         div(class="form-group")
             input(type="password" class="form-control" id="Password2" name="pwd2" placeholder="Retapez votre mot de passe")
         button(type="submit" class="btn btn-primary") Confirmer
+    if err
+        p There is a #{err}
