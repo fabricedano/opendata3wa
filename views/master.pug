@@ -11,10 +11,14 @@ html(lang="fr")
     nav(class="navbar navbar-expand-lg navbar-light bg-light justify-content-between")
         a(class="navbar-brand" href="/") Home
         ul(class="navbar-nav")
-            li(class="nav-item")
-                a.nav-link(href="/login") Connexion
-            li(class="nav-item") 
-                a.nav-link(href="/register") Inscription
+            if user
+                li
+                    | Vous êtes connecté en tant que #{user.firstname} #{user.lastname}
+            else
+                li(class="nav-item")
+                    a.nav-link(href="/login") Connexion
+                li(class="nav-item") 
+                    a.nav-link(href="/register") Inscription
     each messages, kind in flashMessages
         div(class="alert alert-"+kind + " alert-flash")
             each message in messages
