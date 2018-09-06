@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const hash = require('./../hash')
+const hash = require('./../hash');
+
 
 const UserSchema = mongoose.Schema({
     firstname : { type: String, required: true },

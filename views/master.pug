@@ -9,12 +9,16 @@ html(lang="fr")
     link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous")
   body
     nav(class="navbar navbar-expand-lg navbar-light bg-light justify-content-between")
-            a(class="navbar-brand" href="/") Home
-            ul(class="navbar-nav")
-                li(class="nav-item")
-                    a.nav-link(href="/login") Connexion
-                li(class="nav-item") 
-                    a.nav-link(href="/register") Inscription
+        a(class="navbar-brand" href="/") Home
+        ul(class="navbar-nav")
+            li(class="nav-item")
+                a.nav-link(href="/login") Connexion
+            li(class="nav-item") 
+                a.nav-link(href="/register") Inscription
+    each messages, kind in flashMessages
+        div(class="alert alert-"+kind + " alert-flash")
+            each message in messages
+                | #{message}
     block content
     block scripts
         sript(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
