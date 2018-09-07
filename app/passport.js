@@ -7,6 +7,16 @@ const User = require('./models/User.models')
 
 
 module.exports = function(passport) {
+
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+      });
+      
+    passport.deserializeUser(function(user, done) {
+    done(null, user);
+    });
+
+
     //Stratégie Locale
     // ----
 
@@ -47,11 +57,22 @@ module.exports = function(passport) {
             });
     }))
 
-    passport.serializeUser(function(user, done) {
-        done(null, user);
-      });
-      
-    passport.deserializeUser(function(user, done) {
-    done(null, user);
-    });
+     // Stratégie Github
+    // ----
+    
+    passport.use(new GithubStrategy({
+    	clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: `http://${process.env.SERVER_NAME}:${process.env.SERVER_PORT}/auth/github/callback`
+    },
+        function(token, tokenSecret, profile, cb) {
+            console.log('PROFILE GITHUB', profile);
+            User.signupViaGithub(profile)
+                .then(user => cb(null, user))
+                .catch(err => cb(err, false));
+        }
+    ));
+
+    
+   
 }

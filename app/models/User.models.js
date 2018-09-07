@@ -7,7 +7,6 @@ const UserSchema = mongoose.Schema({
 	lastname : { type: String, required: true },
     email : {
         type: String,
-        required: true,
         validate: {
             validator: function(mailValue) {
                 // c.f. http://emailregex.com/
@@ -16,10 +15,12 @@ const UserSchema = mongoose.Schema({
             },
             message: 'L\'adresse email {VALUE} n\'est pas une adresse RFC valide.'
         }
+        //required: [true, 'Le champs "email" est obligatoire'] // A vérifier désormais dans la méthode .register()
     },
     salt: { type: String },
     hash: { type: String },
-    githubId: {type: String }
+    githubId: { type: String },
+    avatarUrl: { type: String }
 });
 
 UserSchema.statics.register = function(firstname, lastname, email, pass, pass_confirmation) {
@@ -44,6 +45,12 @@ UserSchema.statics.register = function(firstname, lastname, email, pass, pass_co
     if (pass_errors.length === 0 && pass.trim() !== pass_confirmation.trim())
         pass_errors.push('Les mots de passe doivent être identiques')
 
+    if (pass_errors.length === 0 && pass.trim() !== pass_confirmation.trim())
+        pass_errors.push('Les mots de passe doivent être identiques')
+        
+    if (email.trim() === '')
+    	pass_errors.push('L\'adresse email doit être renseignée')
+    
     if (pass_errors.length > 0)
         return Promise.reject(pass_errors)
 
@@ -89,6 +96,26 @@ UserSchema.statics.verifyPass = function(passwordInClear, userObject) {
             return Promise.reject(new Error('Mot de pass invalide!'))
         }
     })
+}
+
+UserSchema.statics.signupViaGithub = function(profile) {
+
+    // Recherche si cet utilisateur (loggué via Github) n'est pas déjà dans notre base mongo ?
+    return this.findOne({ 'githubId' : profile.id })
+        .then(user => {
+            // Non ! Donc on l'inscrit dans notre base..
+            if (user === null) {
+                const [firstname, lastname] = profile.displayName.split(' ');
+                return this.create({
+                    githubId : profile.id,
+                    firstname : firstname || '',
+                    lastname : lastname || '',
+                    avatarUrl : profile.photos[0].value // Photo par défaut de l'user Github
+                });
+            }
+            // On renvoie l'utilisateur final
+            return user;
+        });
 }
 
 module.exports = mongoose.model('User', UserSchema);
